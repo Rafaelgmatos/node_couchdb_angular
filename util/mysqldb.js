@@ -9,15 +9,6 @@ exports.query = function(objto, sucesso, err){
     port      : 3306
   });
 
-  /*
-  Servidor: sql10.freemysqlhosting.net
-  Nome: sql10286408
-  Nome de usuário: sql10286408
-  Senha: IrlX9Tt3zG
-  Número da porta: 3306
-  */
-
-
   if(objto.param == undefined){
     connection.query(objto.sql, function(error, results, fields){
         if(error){

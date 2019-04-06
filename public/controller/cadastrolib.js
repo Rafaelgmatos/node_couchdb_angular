@@ -1,23 +1,22 @@
 function cadastrolib($scope, dtService) {
 
+
+    //criar mensagem de confirmação para exclusão
     this.excluir = (model) => {
-      console.log('excluir:', model);
-      if($scope[model+'_dto'] == undefined){
-        //toastr.success('Selecione um registro para excluir!', 'Alerta');
-      }else{
-        //$scope.mensagem('excluir', function() {
-            var url = '/model/'+model+'/excluir/';
-            var dto = $scope[model+'_dto'];
-            dtService.excluir(url, dto, function(dt){
-              if(dt[0].msg == 'sucesso'){
-                $scope.limpar(model);
-              }else{
-                console.log('Error[msg]:', dt);
-              }
+        var url = '/model/'+model+'/excluir/';
+        var dto = $scope[model+'_dto'];
+        dtService.excluir(url, dto, function(dt){
+          if(dt[0].msg == 'sucesso'){
+            var updatelist = $scope[model+'_lista'].filter((elem)=> {
+              return elem._id != dto._id 
             });
-  
-        //})
-      }
+            $scope[model+'_lista'] = updatelist;
+            $scope.limpar(model);
+            $scope.crtgrid('limpaselecao')
+          }else{
+            console.log('Error[msg]:', dt);
+          }
+        });
   
     }
   /*
@@ -28,17 +27,22 @@ function cadastrolib($scope, dtService) {
         var valido = true;
         var url = '/model/'+model;
         var dto = $scope[model + '_dto'];
-        if(dto != undefined && dto.id == undefined){
+        var acao = ''
+        if(dto != undefined && dto._id == undefined){
           url +='/insert'
         }else if(dto != undefined){
           url +='/update'
         }
+
         var msgerror = [];
         dtService.salvar(url, dto, function(dt) {
             if(dt[0].msg =='sucesso'){
-              $scope[model + '_dto'] = angular.extend($scope[model + '_dto'], dt[0]);
+              $scope[model + '_lista'].push(angular.extend($scope[model + '_dto'], dt[0]));
+              $scope.limpar(model)
+              //fechar modal
               //toastr.success( 'Sucesso', '' );
-              $("#idmodal").attr({"style":"display: block;"});
+              $('#idmodal').modal('hide');
+              //$("#idmodal").attr({"style":"display: block;"});
             }else{
               toastr.error( dt[i].msg, dt[i].titulo );
             }
@@ -63,7 +67,7 @@ function cadastrolib($scope, dtService) {
     this.getall = (model, filtros) => {
       var url = '/model/'+model+'/getall';
       dtService.getall(url, {}, function(dt) {
-        $scope.produto_lista = dt;
+        $scope[model+'_lista'] = dt;
       });
     }
     /*
@@ -76,9 +80,27 @@ function cadastrolib($scope, dtService) {
     /*
     -------------------------------------------------------------------------------
     */
+    this.fecharModal = (model) => {
+      //$scope[model] = {};
+      //$scope[model + '_dto'] = {};
+    }
+    /*
+    -------------------------------------------------------------------------------
+    */
     this.setall = (model, registro) => {
       $scope[model + '_dto'] = registro;
     }
+    /*
+    -------------------------------------------------------------------------------
+    */
+   this.crtgrid = (index) => {
+     var igrid = document.getElementById($scope.selecao+'_grid')
+     if($scope.selecao != undefined && igrid != null){
+      igrid.classList.remove("'alert-warning'")
+     }
+    $scope.selecao = index;
+
+  }
     /*
     -------------------------------------------------------------------------------
     */

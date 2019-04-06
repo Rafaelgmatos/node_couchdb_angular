@@ -26,10 +26,10 @@ function Metodo(req, res) {
     ativo_logico: inp.ativo_logico == undefined ? true : inp.ativo_logico
   }
 
-  if(inp.id != undefined){
-    this.obj._id  = inp.id;
+  if(inp._id != undefined){
+    this.obj._id  = inp._id;
   }
-  if(inp.id != undefined){
+  if(inp._rev != undefined){
     this.obj._rev  = inp._rev;
   }
 
@@ -56,9 +56,12 @@ Metodo.prototype.get = function() {
 // class methods
 Metodo.prototype.getall = function() {
   this.db.get(this.model, "_all_docs",{include_docs:true}).then((data, headers, status) => {
-      newdata = data.data.rows.map( function( elem ) {
-        if(elem.doc.ativo_logico === true) return elem.doc
+      newdata = data.data.rows.filter( ( elem )=>{
+        return elem.doc.ativo_logico === true 
+      }).map((elem)=>{
+        return elem.doc
       });
+      console.log('newdata::', newdata);
       this.res.send(newdata) 
   }, err => {
     console.log('data::', err);
@@ -69,8 +72,10 @@ Metodo.prototype.getall = function() {
 
 // class methods
 Metodo.prototype.update = function() {
+  console.log('Update teste', this.model, this.obj)
   this.db.update(this.model, this.obj).then((result)=>{
-    this.res.send([{msg:'sucesso', _id: result.data.id, _rev : result.data.rev }])
+    console.log('dados::', result)
+    this.res.send([{msg:'sucesso', _id: result.data.id, _rev : result.data._rev }])
   }, err=>{
     this.res.send([{msg:'erro', erro: err}])
   })
@@ -92,6 +97,7 @@ Metodo.prototype.insert = function() {
 Metodo.prototype.excluir = function() {
   this.obj.ativo_logico = false;
   this.db.update(this.model, this.obj).then((result)=>{
+    console.log('dados::', result)
     this.res.send([{msg:'sucesso'}])
   }, err=>{
     this.res.send([{msg:'erro', erro: err}])

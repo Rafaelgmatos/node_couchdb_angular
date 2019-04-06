@@ -41,4 +41,5 @@ app.controller('Cadastro', ['$scope','dtService', function($scope, dtService) {
   $scope.getall = new cadastrolib($scope, dtService).getall;
   $scope.setall = new cadastrolib($scope, dtService).setall;
   $scope.excluir = new cadastrolib($scope, dtService).excluir;
+  $scope.crtgrid = new cadastrolib($scope, dtService).crtgrid;
 }]);

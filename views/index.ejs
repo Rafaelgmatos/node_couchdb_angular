@@ -47,7 +47,7 @@
             </div>
             <div class="card-body">
               <div class="table-responsive">
-                <table class="table table-fixed table-striped" >
+                <table class="table table-fixed" >
                   <thead>
                     <tr>
                       <th>Modelo</th>
@@ -58,7 +58,7 @@
                     </tr>
                   </thead>
                   <tbody class="ttbody">
-                    <tr ng-repeat="x in produto_lista" ng-click="setall('produto', x);selecao = $index" ng-class="{'warning': selecao == $index }" >
+                    <tr ng-repeat="x in produto_lista" id="{{$index+'_grid'}}" ng-click="setall('produto', x); crtgrid($index)" ng-class="{'alert-warning': selecao == $index }" >
                       <td>{{x.modelo}}</td>
                       <td>{{x.tamanho}}</td>
                       <td>{{x.estoque}}</td>
