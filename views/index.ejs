@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
+  <link rel="stylesheet" href="/lib/css/theme.css" type="text/css">
+  <link rel="stylesheet" href="/lib/css/table.css" type="text/css">
+</head>
+
+<body  ng-app="app">
+  <div ng-controller="Cadastro">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container"> <a class="navbar-brand" href="#">
+        <i class="fa d-inline fa-lg fa-circle-o"></i>
+        <b> FeraCode</b>
+      </a> <button class="navbar-toggler navbar-toggler-right border-0" type="button" data-toggle="collapse" data-target="#navbar11">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbar11">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item"> <a class="nav-link" href="#">LOJA</a> </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+
+  <div class="py-3" ng-init="getall('produto')">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-header">
+              <div class="row">
+                <div class="text-uppercase col-md-6">
+                  <h4>fraldas</h4>
+                </div>
+                <div class="col-md-6 text-right">  
+                  <a ng-click="vender()" title="Vender" ng-disabled="produto_dto._id == undefined" ng-class="{'btn-info': produto_dto._id == undefined, 'btn-primary': produto_dto._id != undefined }" class="btn btn-primary align-items-end" href="#"><i class="fa fa-fw fa-1x py-0 fa-shopping-cart"></i></a>
+                  <a ng-click="novo" title="Novo" data-toggle="modal"  data-target="#idmodel" class="btn btn-primary align-items-end" href="#"><i class="fa fa-fw fa-1x py-0 fa-plus"></i></a>
+                  <a ng-click="editar" title="Editar" data-toggle="modal"  data-target="#idmodel"  ng-disabled="produto_dto._id == undefined" ng-class="{'btn-info': produto_dto._id == undefined, 'btn-primary': produto_dto._id != undefined }" class="btn align-items-end" href="#"><i class="fa fa-fw fa-1x py-0 fa-pencil"></i></a>
+                  <a ng-click="excluir('produto')"title="Deletar"  ng-disabled="produto_dto._id == undefined" ng-class="{'btn-info': produto_dto._id == undefined, 'btn-primary': produto_dto._id != undefined }" class="btn btn-primary align-items-end" href="#"><i class="fa fa-fw fa-1x py-0 fa-trash-o"></i></a>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-fixed table-striped" >
+                  <thead>
+                    <tr>
+                      <th>Modelo</th>
+                      <th>Tamanho</th>
+                      <th>Estoque</th>
+                      <th>Vendido</th>
+                      <th>Termino</th>
+                    </tr>
+                  </thead>
+                  <tbody class="ttbody">
+                    <tr ng-repeat="x in produto_lista" ng-click="setall('produto', x);selecao = $index" ng-class="{'warning': selecao == $index }" >
+                      <td>{{x.modelo}}</td>
+                      <td>{{x.tamanho}}</td>
+                      <td>{{x.estoque}}</td>
+                      <td>{{x.vendido}}</td>
+                      <td>{{x.termina}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+               
+  <div class="modal fade" id="idmodel">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header" id="vidmodel">
+          <h5 class="modal-title">Cadastro de Fraldas</h5> <button type="button" class="close" data-dismiss="modal"> <span>×</span> </button>
+        </div>
+        <div class="modal-body">
+          <p class="text-right">* Campo obrigatorio</p>
+          <form id="c_form-h" class="">
+            <div class="form-group row"> <label for="inputmailh" class="col-2 col-form-label" contenteditable="true">* Modelo</label>
+              <div class="col-10">
+                <input type="text" ng-model="produto_dto.modelo" class="form-control" id="inputmailh"> </div>
+            </div>
+            <div class="form-group row"> <label for="inputmailh" class="col-2 col-form-label">* Tamanho</label>
+              <div class="col-10">
+                <input type="text" ng-model="produto_dto.tamanho" class="form-control" id="inputmailh"> </div>
+            </div>
+            <div class="form-group row"> <label for="inputmailh" class="col-2 col-form-label">* Estoque</label>
+              <div class="col-10">
+                <input type="text" ng-model="produto_dto.estoque" class="form-control" id="inputmailh"> </div>
+            </div>
+            <div class="form-group row"> <label for="inputmailh" class="col-2 col-form-label">* Vendido</label>
+              <div class="col-10">
+                <input type="text" ng-model="produto_dto.vendido" class="form-control" id="inputmailh"> </div>
+            </div>
+            <div class="form-group row"> <label for="inputmailh" class="col-2 col-form-label">Descrição</label>
+              <div class="col-10">
+                <input type="text"  ng-model="produto_dto.descricao" class="form-control" id="inputmailh"> </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer"> 
+          <button ng-click="salvar('produto')" type="button" class="btn btn-primary">Salvar</button> 
+          <button ng-click="fechar" type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button> </div>
+      </div>
+    </div>
+  </div>
+</div>
+  <script src="/lib/angular-1.7.2/angular.min.js"></script>
+  <script src="/lib/angular-1.7.2/angular-route.min.js"></script>
+  <script src="/controller/cadastrolib.js"></script>
+  <script src="/controller/app.js"></script>
+
+  <script src="/lib/js/jquery-3.3.1.slim.min.js"></script>
+  <script src="/lib/js/popper.min.js"></script>
+  <script src="/lib/js/bootstrap.min.js"></script>
+</body>
+
+</html>
