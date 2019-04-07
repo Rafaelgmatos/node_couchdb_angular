@@ -1,8 +1,15 @@
+
 function cadastrolib($scope, dtService) {
 
-
+    this.novo = (model) => {
+      $scope[model+'_dto'] = {}
+    }
+    /*
+    -------------------------------------------------------------------------------
+    */
     //criar mensagem de confirmação para exclusão
     this.excluir = (model) => {
+      $scope.mensagem('excluir', function() {
         var url = '/model/'+model+'/excluir/';
         var dto = $scope[model+'_dto'];
         dtService.excluir(url, dto, function(dt){
@@ -17,7 +24,7 @@ function cadastrolib($scope, dtService) {
             console.log('Error[msg]:', dt);
           }
         });
-  
+      })
     }
   /*
   -------------------------------------------------------------------------------
@@ -39,10 +46,7 @@ function cadastrolib($scope, dtService) {
             if(dt[0].msg =='sucesso'){
               $scope[model + '_lista'].push(angular.extend($scope[model + '_dto'], dt[0]));
               $scope.limpar(model)
-              //fechar modal
-              //toastr.success( 'Sucesso', '' );
-              $('#idmodal').modal('hide');
-              //$("#idmodal").attr({"style":"display: block;"});
+              $('#idmodel').modal('hide');
             }else{
               toastr.error( dt[i].msg, dt[i].titulo );
             }
@@ -74,21 +78,17 @@ function cadastrolib($scope, dtService) {
     -------------------------------------------------------------------------------
     */
     this.limpar = (model) => {
-      $scope[model] = {};
-      $scope[model + '_dto'] = {};
+      setTimeout(()=>{
+        $scope[model] = {};
+        $scope[model + '_dto'] = {};
+      },5)
     }
     /*
     -------------------------------------------------------------------------------
     */
-    this.fecharModal = (model) => {
-      //$scope[model] = {};
-      //$scope[model + '_dto'] = {};
-    }
-    /*
-    -------------------------------------------------------------------------------
-    */
-    this.setall = (model, registro) => {
+    this.setall = (model, registro, index) => {
       $scope[model + '_dto'] = registro;
+      $scope[model + '_index'] = index;
     }
     /*
     -------------------------------------------------------------------------------
@@ -100,7 +100,75 @@ function cadastrolib($scope, dtService) {
      }
     $scope.selecao = index;
 
-  }
+    }
+    /*
+    -------------------------------------------------------------------------------
+    */
+   this.comprar = (model) => {
+     var estoque = parseFloat($scope[model + '_dto'].estoque);
+     var vendido = parseFloat($scope[model + '_dto'].vendido);
+     var id = $scope[model + '_dto']._id;
+
+     if(estoque > 0){
+      $scope[model + '_dto'].estoque = estoque - 1
+      $scope[model + '_dto'].vendido = vendido + 1
+
+      var url = '/model/'+model+'/update';
+      var dto = $scope[model + '_dto'];
+
+      console.log('event::', event)
+
+      dtService.salvar(url, dto, function(dt) {
+          if(dt[0].msg =='sucesso'){
+            //console.log('retorno:::', $index)
+            $scope[model + '_lista'][$scope[model + '_index']] = angular.extend($scope[model + '_dto'], dt[0]);
+            /*
+            crtCompra = (angular.extend($scope[model + '_dto'], dt[0]).map(item=>{
+              return item.termino = 
+            });
+            */
+          }else{
+            toastr.error( dt[i].msg, dt[i].titulo );
+          }
+      });
+     }else{
+      alert('Quantidade indisponível!')
+     }
+
+
+   }
+    /*
+    -------------------------------------------------------------------------------
+    */
+   this.tempovenda = (obj) => {
+    var estoque = parseFloat(obj.estoque)
+    var vendido = parseFloat(obj.vendido)
+    //var temp = $scope['temp_'+obj._id];
+
+    
+    //dt = JSON.parse(window.localStorage.getItem(obj._id));
+    //estimando = dt.map(elem =>{
+    //})
+
+    return '100min'
+
+   }
+
+    /*
+      this.setItem(key, value) {
+        window.localStorage.setItem(key, JSON.stringify(value));
+      };
+  
+      this.getItem(key) {
+        return  JSON.parse(window.localStorage.getItem(key));
+      };
+  
+      this.delItem(key){
+        window.localStorage.removeItem(key);
+      }
+      */
+ 
+
     /*
     -------------------------------------------------------------------------------
     */
@@ -159,10 +227,6 @@ function cadastrolib($scope, dtService) {
   
     }
     */
-  
-  
-    //this.tela = (tela, model) => {
-    //  element.append($compile(mylista)( scope ));
-    //}
+
   } //fim function form
   

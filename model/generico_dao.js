@@ -75,7 +75,7 @@ Metodo.prototype.update = function() {
   console.log('Update teste', this.model, this.obj)
   this.db.update(this.model, this.obj).then((result)=>{
     console.log('dados::', result)
-    this.res.send([{msg:'sucesso', _id: result.data.id, _rev : result.data._rev }])
+    this.res.send([{msg:'sucesso', _id: result.data.id, _rev : result.data.rev }])
   }, err=>{
     this.res.send([{msg:'erro', erro: err}])
   })

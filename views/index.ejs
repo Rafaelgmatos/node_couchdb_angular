@@ -38,8 +38,8 @@
                   <h4>fraldas</h4>
                 </div>
                 <div class="col-md-6 text-right">  
-                  <a ng-click="vender()" title="Vender" ng-disabled="produto_dto._id == undefined" ng-class="{'btn-info': produto_dto._id == undefined, 'btn-primary': produto_dto._id != undefined }" class="btn btn-primary align-items-end" href="#"><i class="fa fa-fw fa-1x py-0 fa-shopping-cart"></i></a>
-                  <a ng-click="novo" title="Novo" data-toggle="modal"  data-target="#idmodel" class="btn btn-primary align-items-end" href="#"><i class="fa fa-fw fa-1x py-0 fa-plus"></i></a>
+                  <a ng-click="comprar('produto')" title="Comprar" ng-disabled="produto_dto._id == undefined || disblecompra " ng-class="{'btn-info': produto_dto._id == undefined, 'btn-primary': produto_dto._id != undefined }" class="btn btn-primary align-items-end" href="#"><i class="fa fa-fw fa-1x py-0 fa-shopping-cart"></i></a>
+                  <a ng-click="novo('produto')" title="Novo" data-toggle="modal"  data-target="#idmodel" class="btn btn-primary align-items-end" href="#"><i class="fa fa-fw fa-1x py-0 fa-plus"></i></a>
                   <a ng-click="editar" title="Editar" data-toggle="modal"  data-target="#idmodel"  ng-disabled="produto_dto._id == undefined" ng-class="{'btn-info': produto_dto._id == undefined, 'btn-primary': produto_dto._id != undefined }" class="btn align-items-end" href="#"><i class="fa fa-fw fa-1x py-0 fa-pencil"></i></a>
                   <a ng-click="excluir('produto')"title="Deletar"  ng-disabled="produto_dto._id == undefined" ng-class="{'btn-info': produto_dto._id == undefined, 'btn-primary': produto_dto._id != undefined }" class="btn btn-primary align-items-end" href="#"><i class="fa fa-fw fa-1x py-0 fa-trash-o"></i></a>
                 </div>
@@ -58,12 +58,12 @@
                     </tr>
                   </thead>
                   <tbody class="ttbody">
-                    <tr ng-repeat="x in produto_lista" id="{{$index+'_grid'}}" ng-click="setall('produto', x); crtgrid($index)" ng-class="{'alert-warning': selecao == $index }" >
-                      <td>{{x.modelo}}</td>
-                      <td>{{x.tamanho}}</td>
-                      <td>{{x.estoque}}</td>
-                      <td>{{x.vendido}}</td>
-                      <td>{{x.termina}}</td>
+                    <tr ng-repeat="x in produto_lista" id="{{$index+'_grid'}}" ng-click="setall('produto', x, $index); crtgrid($index)" ng-class="{'alert-warning': selecao == $index }" >
+                      <td ng-bind="x.modelo"></td>
+                      <td ng-bind="x.tamanho"></td>
+                      <td ng-bind="x.estoque"></td>
+                      <td ng-bind="x.vendido"></td>
+                      <td ng-bind="tempovenda(x)"></td>
                     </tr>
                   </tbody>
                 </table>
@@ -94,11 +94,11 @@
             </div>
             <div class="form-group row"> <label for="inputmailh" class="col-2 col-form-label">* Estoque</label>
               <div class="col-10">
-                <input type="text" ng-model="produto_dto.estoque" class="form-control" id="inputmailh"> </div>
+                <input type="number" ng-model="produto_dto.estoque" class="form-control" id="inputmailh"> </div>
             </div>
             <div class="form-group row"> <label for="inputmailh" class="col-2 col-form-label">* Vendido</label>
               <div class="col-10">
-                <input type="text" ng-model="produto_dto.vendido" class="form-control" id="inputmailh"> </div>
+                <input type="number" ng-model="produto_dto.vendido" class="form-control" id="inputmailh"> </div>
             </div>
             <div class="form-group row"> <label for="inputmailh" class="col-2 col-form-label">Descrição</label>
               <div class="col-10">
@@ -121,6 +121,7 @@
   <script src="/lib/js/jquery-3.3.1.slim.min.js"></script>
   <script src="/lib/js/popper.min.js"></script>
   <script src="/lib/js/bootstrap.min.js"></script>
+  <script src="/lib/sweetalert2/dist/sweetalert2.all.min.js"></script>
 </body>
 
 </html>
