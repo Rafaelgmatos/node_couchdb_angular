@@ -38,10 +38,10 @@
                   <h4>fraldas</h4>
                 </div>
                 <div class="col-md-6 text-right">  
-                  <a ng-click="comprar('produto')" title="Comprar" ng-disabled="produto_dto._id == undefined || disblecompra " ng-class="{'btn-info': produto_dto._id == undefined, 'btn-primary': produto_dto._id != undefined }" class="btn btn-primary align-items-end" href="#"><i class="fa fa-fw fa-1x py-0 fa-shopping-cart"></i></a>
-                  <a ng-click="novo('produto')" title="Novo" data-toggle="modal"  data-target="#idmodel" class="btn btn-primary align-items-end" href="#"><i class="fa fa-fw fa-1x py-0 fa-plus"></i></a>
-                  <a ng-click="editar" title="Editar" data-toggle="modal"  data-target="#idmodel"  ng-disabled="produto_dto._id == undefined" ng-class="{'btn-info': produto_dto._id == undefined, 'btn-primary': produto_dto._id != undefined }" class="btn align-items-end" href="#"><i class="fa fa-fw fa-1x py-0 fa-pencil"></i></a>
-                  <a ng-click="excluir('produto')"title="Deletar"  ng-disabled="produto_dto._id == undefined" ng-class="{'btn-info': produto_dto._id == undefined, 'btn-primary': produto_dto._id != undefined }" class="btn btn-primary align-items-end" href="#"><i class="fa fa-fw fa-1x py-0 fa-trash-o"></i></a>
+                  <button ng-click="comprar('produto')" title="Comprar" ng-disabled="produto_dto._id == undefined ||  disblecompra == false" ng-class="{'btn-info': (produto_dto._id == undefined ||  disblecompra == false), 'btn-primary': produto_dto._id != undefined }" class="btn btn-primary align-items-end" ><i class="fa fa-fw fa-1x py-0 fa-shopping-cart"></i></button>
+                  <button ng-click="novo('produto')" title="Novo" data-toggle="modal"  data-target="#idmodel" class="btn btn-primary align-items-end" href="#"><i class="fa fa-fw fa-1x py-0 fa-plus"></i></button>
+                  <button ng-click="editar" title="Editar" data-toggle="modal"  data-target="#idmodel"  ng-disabled="produto_dto._id == undefined" ng-class="{'btn-info': produto_dto._id == undefined, 'btn-primary': produto_dto._id != undefined }" class="btn align-items-end" href="#"><i class="fa fa-fw fa-1x py-0 fa-pencil"></i></button>
+                  <button ng-click="excluir('produto')"title="Deletar"  ng-disabled="produto_dto._id == undefined" ng-class="{'btn-info': produto_dto._id == undefined, 'btn-primary': produto_dto._id != undefined }" class="btn btn-primary align-items-end" href="#"><i class="fa fa-fw fa-1x py-0 fa-trash-o"></i></button>
                 </div>
               </div>
             </div>
@@ -122,6 +122,7 @@
   <script src="/lib/js/popper.min.js"></script>
   <script src="/lib/js/bootstrap.min.js"></script>
   <script src="/lib/sweetalert2/dist/sweetalert2.all.min.js"></script>
+  <script src="/lib/moment/moment.js"></script>
 </body>
 
 </html>

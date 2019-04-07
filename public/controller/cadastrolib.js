@@ -18,7 +18,7 @@ function cadastrolib($scope, dtService) {
               return elem._id != dto._id 
             });
             $scope[model+'_lista'] = updatelist;
-            $scope.limpar(model);
+            $scope[model+'_dto'] = {};
             $scope.crtgrid('limpaselecao')
           }else{
             console.log('Error[msg]:', dt);
@@ -106,8 +106,15 @@ function cadastrolib($scope, dtService) {
     */
    this.comprar = (model) => {
      var estoque = parseFloat($scope[model + '_dto'].estoque);
-     var vendido = parseFloat($scope[model + '_dto'].vendido);
+     var vendido = parseFloat($scope[model + '_dto'].vendido == undefined ? 0 : $scope[model + '_dto'].vendido);
      var id = $scope[model + '_dto']._id;
+     $scope.disblecompra = false;
+
+     if($scope['temp_'+id] == undefined){
+      $scope['temp_'+id] = []
+     }
+
+
 
      if(estoque > 0){
       $scope[model + '_dto'].estoque = estoque - 1
@@ -119,16 +126,30 @@ function cadastrolib($scope, dtService) {
       console.log('event::', event)
 
       dtService.salvar(url, dto, function(dt) {
+          $scope.disblecompra = true;
           if(dt[0].msg =='sucesso'){
-            //console.log('retorno:::', $index)
             $scope[model + '_lista'][$scope[model + '_index']] = angular.extend($scope[model + '_dto'], dt[0]);
-            /*
-            crtCompra = (angular.extend($scope[model + '_dto'], dt[0]).map(item=>{
-              return item.termino = 
-            });
-            */
+            if($scope['temp_'+id] == undefined){
+             $scope['temp_'+id] = []
+            }
+            $scope['temp_'+id].push(moment().format('DD/MM/YYYY HH:mm'))
+
+            $scope['interv_'+id]  = $scope['temp_'+id].map((elem, index, arr)=>{
+              if(arr[index+1] != undefined) {
+                x = moment.utc(moment(arr[index+1], 'DD/MM/YYYY HH:mm').diff( moment(elem, 'DD/MM/YYYY HH:mm'))).format("mm"); 
+                if (parseFloat(x) > 0){
+                  console.log('retorno x::', x, parseFloat(x))
+                  return parseFloat(x)
+                } 
+                
+              }
+            })
+            .filter(el => el != undefined)
+            
+            console.log('retorno::', $scope['interv_'+id])
+
           }else{
-            toastr.error( dt[i].msg, dt[i].titulo );
+            //toastr.error( dt[i].msg, dt[i].titulo );
           }
       });
      }else{
@@ -141,18 +162,39 @@ function cadastrolib($scope, dtService) {
     -------------------------------------------------------------------------------
     */
    this.tempovenda = (obj) => {
-    var estoque = parseFloat(obj.estoque)
-    var vendido = parseFloat(obj.vendido)
-    //var temp = $scope['temp_'+obj._id];
-
-    
-    //dt = JSON.parse(window.localStorage.getItem(obj._id));
-    //estimando = dt.map(elem =>{
-    //})
-
-    return '100min'
-
+     var tempo = $scope['interv_'+obj._id];
+     var estoque = parseFloat(obj.estoque);
+     var resultado = 0;
+    if(tempo != undefined && tempo.length == 1){
+      resultado = estoque * tempo[0];
+    }else if(tempo != undefined && tempo.length > 1){
+      intervalo = tempo.reduce((accumulator, currentValue) => {
+        return accumulator + currentValue
+      })
+      resultado = estoque * intervalo;
+    }
+    return resultado+' min'
    }
+
+   /*
+    var dtPartida = "20170620 11:20";
+    var dtChegada = "20170620 16:40";
+
+    var date1 = new Date(dtPartida.slice(0,4), dtPartida.slice(4,6),dtPartida.slice(6,8), dtPartida.slice(9,11), dtPartida.slice(12,14)),
+        date2 = new Date(dtChegada.slice(0,4), dtChegada.slice(4,6),dtChegada.slice(6,8), dtChegada.slice(9,11), dtChegada.slice(12,14));
+
+    var diffMs = (date2 - date1);
+    var diffHrs = Math.floor((diffMs % 86400000) / 3600000);
+    var diffMins = Math.round(((diffMs % 86400000) % 3600000) / 60000);
+    var diff = diffHrs + 'h ' + diffMins + 'm';
+    console.log(diff);
+   ---------------------------------------------------------------------------
+    var date1 = new Date("7/11/2010");
+    var date2 = new Date("12/12/2010");
+    var timeDiff = Math.abs(date2.getTime() - date1.getTime());
+    var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
+    alert(diffDays);
+    */
 
     /*
       this.setItem(key, value) {
