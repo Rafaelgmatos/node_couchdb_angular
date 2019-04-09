@@ -91,7 +91,7 @@ class Metodo{
 
   /*
    methods
-   Essa classe não do modelo generico
+   Essa classe não faz parte do modelo generico
   */
   compra() {
     console.log('Update teste', this.model, this.obj)
