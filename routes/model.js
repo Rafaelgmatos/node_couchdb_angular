@@ -1,6 +1,5 @@
 
 exports.metodo = function(req, res) {
-  fs = require('fs');
   var ac = ['get', 'getall', 'salvar', 'compra','excluir','insert','update'];
   if (ac.indexOf(req.params.acao) == -1) {
     console.dir(`acao invalida:: ${req.params.acao}`);
