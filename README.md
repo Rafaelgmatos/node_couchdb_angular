@@ -1,5 +1,5 @@
 # node_couchdb_angular
-Modelo de aplicação feita em Nodejs, Express,  CouchDB, Angular e Bootstrap.
+Modelo de aplicação feita em Node.js, Express.js,  CouchDB, Angular.js e Bootstrap.
 
 Instalação:</br>
   npm install</br>
